@@ -35,6 +35,9 @@ namespace GoogleARCore.Examples.HelloAR
     /// </summary>
     public class HelloARController : MonoBehaviour
     {
+
+        public GameObject andyObject;
+
         /// <summary>
         /// The first-person camera being used to render the passthrough camera image (i.e. AR background).
         /// </summary>
@@ -138,7 +141,7 @@ namespace GoogleARCore.Examples.HelloAR
                         }
 
                         // Instantiate Andy model at the hit pose.
-                        var andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
+                        andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
 
                         // Compensate for the hitPose rotation facing away from the raycast (i.e. camera).
                         andyObject.transform.Rotate(0, k_ModelRotation, 0, Space.Self);
@@ -153,6 +156,10 @@ namespace GoogleARCore.Examples.HelloAR
                         // Register new ghost
                         currentNumberOfGhosts++;
                     }
+                }
+                else
+                {
+                    andyObject.GetComponent<CatMovement>().StartMove(hit.Pose.position);
                 }
             }
             RaycastHit rayHit;

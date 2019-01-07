@@ -140,6 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4538935305921674}
   - component: {fileID: 95639387280764442}
+  - component: {fileID: 114754056325340822}
   m_Layer: 0
   m_Name: Cat Lite
   m_TagString: Untagged
@@ -1437,6 +1438,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114754056325340822
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1199763157672304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e8aca4a497aa04494f59a33bd0505f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startMarker: {fileID: 0}
+  endMarker: {x: 0, y: 0, z: 0}
 --- !u!137 &137261179222405320
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
