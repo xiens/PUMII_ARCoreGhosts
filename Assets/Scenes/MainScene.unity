@@ -293,7 +293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &375987250
 RectTransform:
   m_ObjectHideFlags: 0
@@ -503,6 +503,7 @@ MonoBehaviour:
   AndyPointPrefab: {fileID: 1239262088760434, guid: 8338de7d46de5544a8a83c8d1137aef9,
     type: 2}
   SearchingForPlaneUI: {fileID: 1133631540}
+  CrossHairUI: {fileID: 0}
   numberOfGhostsAllowed: 1
 --- !u!1001 &765765265
 Prefab:

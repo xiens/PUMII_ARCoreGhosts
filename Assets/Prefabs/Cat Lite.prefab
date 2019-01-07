@@ -1451,6 +1451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startMarker: {fileID: 0}
   endMarker: {x: 0, y: 0, z: 0}
+  catAnimator: {fileID: 95639387280764442}
 --- !u!137 &137261179222405320
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
