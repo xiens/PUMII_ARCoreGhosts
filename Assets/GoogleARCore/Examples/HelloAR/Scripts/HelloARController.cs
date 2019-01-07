@@ -60,6 +60,9 @@ namespace GoogleARCore.Examples.HelloAR
         /// </summary>
         public GameObject SearchingForPlaneUI;
 
+        //A gameobject parenting UI for displaying the CrossHair
+        public GameObject CrossHairUI;
+
         /// <summary>
         /// The rotation in degrees need to apply to model when the Andy model is placed.
         /// </summary>
@@ -109,6 +112,16 @@ namespace GoogleARCore.Examples.HelloAR
             TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
                 TrackableHitFlags.FeaturePointWithSurfaceNormal;
 
+            //Raycast from middle of the screen, if raycast touches an object, it destroys it
+            RaycastHit rayHit;
+            if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out rayHit))
+            {
+                if (rayHit.transform.gameObject.name == "turtle_with_vertex_color")
+                {
+                    Destroy(rayHit.transform.gameObject);
+                }
+            }
+
             if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
             {
                 // Use hit pose and camera pose to check if hittest is from the
@@ -146,14 +159,8 @@ namespace GoogleARCore.Examples.HelloAR
                     andyObject.transform.parent = anchor.transform;
                 }
             }
-            RaycastHit rayHit;
-            if(Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out rayHit))
-            {
-                if(rayHit.transform.gameObject.name == "AndyGreen")
-                {
-                    GameObject.Destroy(rayHit.transform.gameObject);
-                }
-            }
+            
+
         }
 
         /// <summary>
