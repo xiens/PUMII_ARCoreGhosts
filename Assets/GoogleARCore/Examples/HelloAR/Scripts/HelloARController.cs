@@ -84,7 +84,10 @@ namespace GoogleARCore.Examples.HelloAR
 
         public int numberOfGhostsAllowed = 1;
         private int currentNumberOfGhosts = 0;
+        private float accuracy = 0.05f;
 
+        private List<Anchor> anchors;
+        Vector3 previousPos; //previous cat's position
 
         /// <summary>
         /// The Unity Update() method.
@@ -115,17 +118,24 @@ namespace GoogleARCore.Examples.HelloAR
             }
 
             // Raycast against the location the player touched to search for planes.
-            TrackableHit hit;
+            TrackableHit hit, rayHit2;
             TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
                 TrackableHitFlags.FeaturePointWithSurfaceNormal;
 
             //Raycast from middle of the screen, if raycast touches an object, it destroys it
-            RaycastHit rayHit;
-            if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out rayHit))
+            //RaycastHit rayHit;
+            //if (Physics.Raycast(FirstPersonCamera.transform.position, FirstPersonCamera.transform.forward, out rayHit))
+            //{
+            //    if (rayHit.transform.gameObject.name == "turtle_with_vertex_color")
+            //    {
+            //        Destroy(rayHit.transform.gameObject);
+            //    }
+            //}
+            if(Frame.Raycast(Screen.width/2, Screen.height/2, raycastFilter, out rayHit2))
             {
-                if (rayHit.transform.gameObject.name == "turtle_with_vertex_color")
+                if(rayHit2.Trackable is FeaturePoint)
                 {
-                    Destroy(rayHit.transform.gameObject);
+                    Destroy(andyObject);
                 }
             }
 
@@ -168,11 +178,27 @@ namespace GoogleARCore.Examples.HelloAR
 
                         // Register new ghost
                         currentNumberOfGhosts++;
+
+                        previousPos = hit.Pose.position;
+
                     }
                 }
                 else
                 {
-                    andyObject.GetComponent<CatMovement>().StartMove(hit.Pose.position);
+                    //If we click close to cat or at the cat, we kill the cat
+                    //TODO estimate proper accuracy here
+                    if(hit.Pose.position.magnitude > previousPos.magnitude - accuracy && 
+                        hit.Pose.position.magnitude  < previousPos.magnitude + accuracy)
+                    {
+                        Destroy(andyObject);
+                        currentNumberOfGhosts--;
+                    }
+                    //if we click further away, the cat walks to this place
+                    else
+                    {
+                        andyObject.GetComponent<CatMovement>().StartMove(hit.Pose.position);
+                        previousPos = hit.Pose.position;
+                    }
                 }
             }
             
