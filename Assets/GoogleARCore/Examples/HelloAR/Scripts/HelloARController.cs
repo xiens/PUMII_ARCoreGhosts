@@ -109,6 +109,7 @@ namespace GoogleARCore.Examples.HelloAR
             }
 
             SearchingForPlaneUI.SetActive(showSearchingUI);
+            //CrossHairUI.SetActive(true);
 
             // If the player has not touched the screen, we are done with this update.
             Touch touch;
@@ -131,9 +132,9 @@ namespace GoogleARCore.Examples.HelloAR
             //        Destroy(rayHit.transform.gameObject);
             //    }
             //}
-            if(Frame.Raycast(Screen.width/2, Screen.height/2, raycastFilter, out rayHit2))
+            if (Frame.Raycast(Screen.width / 2, Screen.height / 2, raycastFilter, out rayHit2))
             {
-                if(rayHit2.Trackable is FeaturePoint)
+                if (rayHit2.Trackable is FeaturePoint)
                 {
                     Destroy(andyObject);
                 }
@@ -141,7 +142,8 @@ namespace GoogleARCore.Examples.HelloAR
 
             if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
             {
-                if (currentNumberOfGhosts < numberOfGhostsAllowed) {
+                if (currentNumberOfGhosts < numberOfGhostsAllowed)
+                {
                     // Use hit pose and camera pose to check if hittest is from the
                     // back of the plane, if it is, no need to create the anchor.
                     if ((hit.Trackable is DetectedPlane) &&
@@ -187,8 +189,10 @@ namespace GoogleARCore.Examples.HelloAR
                 {
                     //If we click close to cat or at the cat, we kill the cat
                     //TODO estimate proper accuracy here
-                    if(hit.Pose.position.magnitude > previousPos.magnitude - accuracy && 
-                        hit.Pose.position.magnitude  < previousPos.magnitude + accuracy)
+                    //if(hit.Pose.position.magnitude > previousPos.magnitude - accuracy && 
+                    //    hit.Pose.position.magnitude  < previousPos.magnitude + accuracy)
+                    //{
+                    if (IsInRange(hit.Pose.position, previousPos, accuracy))
                     {
                         Destroy(andyObject);
                         currentNumberOfGhosts--;
@@ -201,9 +205,24 @@ namespace GoogleARCore.Examples.HelloAR
                     }
                 }
             }
-            
-
         }
+
+        private bool IsInRange(Vector3 currentPos, Vector3 previousPos, float acc)
+        {
+            if ((currentPos.x > previousPos.x - acc && currentPos.x < previousPos.x + acc) &&
+            (currentPos.y > previousPos.y - acc && currentPos.y < previousPos.y + acc) &&
+            (currentPos.z > previousPos.z - acc && currentPos.z < previousPos.z + acc))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+    
+
+
 
         /// <summary>
         /// Check and update the application lifecycle.
