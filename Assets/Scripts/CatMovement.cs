@@ -62,7 +62,7 @@ public class CatMovement : MonoBehaviour {
 
         }
     }
-    public void StartMove(Vector3 endPosition)
+    public void StartMove(Transform startPosition, Vector3 endPosition, bool FromRandom)
     {
         try
         {
@@ -72,7 +72,11 @@ public class CatMovement : MonoBehaviour {
         {
             Debug.Log("Ughh stupid");
         }
-        startMarker = this.transform;
+        if (!FromRandom)
+            startMarker = this.transform;
+        else
+            startMarker = startPosition;
+
         endMarker = endPosition;
         // Keep a note of the time the movement started.
         startTime = Time.time;

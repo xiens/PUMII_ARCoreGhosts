@@ -84,7 +84,8 @@ namespace GoogleARCore.Examples.HelloAR
 
         public int numberOfGhostsAllowed = 1;
         private int currentNumberOfGhosts = 0;
-        private float accuracy = 0.05f;
+        private float accuracy = 0.2f;
+        public static bool goToRandomPlace = false;
 
         private List<Anchor> anchors;
         Vector3 previousPos; //previous cat's position
@@ -166,6 +167,7 @@ namespace GoogleARCore.Examples.HelloAR
                         }
 
                         // Instantiate Andy model at the hit pose.
+                        
                         andyObject = Instantiate(prefab, hit.Pose.position, hit.Pose.rotation);
 
                         // Compensate for the hitPose rotation facing away from the raycast (i.e. camera).
@@ -173,10 +175,10 @@ namespace GoogleARCore.Examples.HelloAR
 
                         // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
                         // world evolves.
-                        var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+                        //var anchor = hit.Trackable.CreateAnchor(hit.Pose);
 
                         // Make Andy model a child of the anchor.
-                        andyObject.transform.parent = anchor.transform;
+                        //andyObject.transform.parent = anchor.transform;
 
                         // Register new ghost
                         currentNumberOfGhosts++;
@@ -192,15 +194,32 @@ namespace GoogleARCore.Examples.HelloAR
                     //if(hit.Pose.position.magnitude > previousPos.magnitude - accuracy && 
                     //    hit.Pose.position.magnitude  < previousPos.magnitude + accuracy)
                     //{
+                    DetectedPlane plane = m_AllPlanes[0];
+                    List<Vector3> boundaryPolygonPoints = new List<Vector3>();
+                    plane.GetBoundaryPolygon(boundaryPolygonPoints);
+
                     if (IsInRange(hit.Pose.position, previousPos, accuracy))
-                    {
-                        Destroy(andyObject);
-                        currentNumberOfGhosts--;
+                    {   
+                        int randomPolygon = Random.Range(1, boundaryPolygonPoints.Count);
+                        //andyObject.transform.position = Vector3();//boundaryPolygonPoints[randomPolygon];
+                        goToRandomPlace = true;
+                        andyObject.transform.position = boundaryPolygonPoints[randomPolygon];
+                        //andyObject.transform.position = boundaryPolygonPoints[0];
+                       
+
+                        // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
+                        // world evolves.
+                        //var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+
+                        // Make Andy model a child of the anchor.
+                        //andyObject.transform.parent = anchor.transform;
+                        
+                        //currentNumberOfGhosts++;
                     }
                     //if we click further away, the cat walks to this place
                     else
                     {
-                        andyObject.GetComponent<CatMovement>().StartMove(hit.Pose.position);
+                        andyObject.GetComponent<CatMovement>().StartMove(andyObject.transform, hit.Pose.position, goToRandomPlace);
                         previousPos = hit.Pose.position;
                     }
                 }
